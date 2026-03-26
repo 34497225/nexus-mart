@@ -15,4 +15,4 @@
 1. 確保已安裝 Docker Desktop。
 2. Clone 專案後，在根目錄建立 `.env` 檔案並填寫資料庫密碼。
 3. 執行 `docker compose up --build -d`。
-4. 瀏覽 `http://localhost:8001`。
+4. 瀏覽 `http://localhost:8002`。

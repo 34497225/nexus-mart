@@ -1,0 +1,40 @@
+name: Deploy NexusMart to AWS EC2
+
+# 當有代碼 push 到 main 分支時觸發
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to EC2 via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+
+          cd ~/nexus-mart # 1. 進入專案資料夾
+          
+          # 2. 強制拉取 GitHub 最新程式碼
+          git fetch --all
+          git reset --hard origin/main
+          
+          # 3. 自動生成正式機的 .env 檔案 (動態注入 Secrets)
+          echo "DEBUG=False" > .env
+          echo "DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.PROD_SECRET_KEY }}" >> .env
+          echo "CSRF_TRUSTED_ORIGINS=['http://${{ secrets.EC2_HOST }}:8002']" >> .env
+          
+          # 4. 重新編譯並重啟 Docker 微服務架構
+          sudo docker compose up --build -d
+          
+          # 5. 清理多餘的舊鏡像，釋放硬碟空間
+          sudo docker image prune -f
