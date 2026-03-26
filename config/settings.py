@@ -139,3 +139,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # docker-compose 裡面我們把 redis 服務命名為 'redis'
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
+
+# 集中收集靜態檔案的目錄 (給 Nginx 用的)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+

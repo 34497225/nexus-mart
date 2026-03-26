@@ -12,7 +12,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
-  # 2. Redis 緩存與訊息佇列
+  # 2. Redis
   redis:
     image: redis:7-alpine
     container_name: nexus_redis
@@ -20,22 +20,27 @@ services:
     ports:
       - "6379:6379"
 
-  # 3. 網頁伺服器
+  # 3. 網頁伺服器 (Django + Gunicorn)
   web:
     build: .
     container_name: nexus_web
     volumes:
       - .:/app
-    ports:
-      - "8001:8000"
+      - ./media:/app/media
+      # 🔹 將 staticfiles 變成 volume，讓 Nginx 也能讀取到
+      - static_volume:/app/staticfiles 
+    # 🔹 改用 Gunicorn 啟動！
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     env_file:
       - .env
     depends_on:
       - db
       - redis
-    command: python manage.py runserver 0.0.0.0:8000
 
-  # 4. Celery 背景任務處理器
+  # 4. Celery 背景任務
   celery:
     build: .
     container_name: nexus_celery
@@ -46,8 +51,25 @@ services:
     depends_on:
       - db
       - redis
-    # 啟動 celery worker 的專屬指令
     command: celery -A config worker -l INFO
+
+  # 5. Nginx 反向代理伺服器 (全新加入！)
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nexus_nginx
+    restart: always
+    ports:
+      # 🔹 外部現在改連 8002 埠號進來，會先經過 Nginx
+      - "8002:80" 
+    volumes:
+      # 掛載 Nginx 設定檔
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      # 掛載靜態與媒體檔案，讓 Nginx 可以直接讀取
+      - static_volume:/app/staticfiles
+      - ./media:/app/media
+    depends_on:
+      - web
 
 volumes:
   mysql_data:
+  static_volume: # 🔹 新增的共享資料卷
