@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}填寫結帳資料 | NexusMart{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-2xl">
+    <h1 class="text-3xl font-bold mb-8">📦 填寫收件資訊</h1>
+    
+    {% if error %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 font-bold">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form action="{% url 'checkout' %}" method="POST" class="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">收件人姓名</label>
+            <input type="text" name="name" required class="w-full px-4 py-3 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">聯絡電話</label>
+            <input type="text" name="phone" required class="w-full px-4 py-3 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
+        </div>
+        <div class="mb-8">
+            <label class="block text-gray-700 font-bold mb-2">收件地址</label>
+            <textarea name="address" required rows="3" class="w-full px-4 py-3 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-green-500 text-white font-bold py-4 rounded-xl hover:bg-green-600 shadow-lg shadow-green-200 text-lg transition-colors">
+            確認下單並送出
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}下單成功 | NexusMart{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-20 text-center">
+    <div class="text-8xl mb-6">🎉</div>
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-4">下單成功！</h1>
+    <p class="text-xl text-gray-600 mb-8">感謝您的購買，您的訂單編號為 <span class="text-blue-600 font-bold">#{{ order.id }}</span></p>
+    
+    <div class="bg-gray-50 p-6 rounded-2xl inline-block text-left mb-8 border border-gray-100">
+        <p class="mb-2"><span class="text-gray-500">收件人：</span> <span class="font-bold">{{ order.name }}</span></p>
+        <p class="mb-2"><span class="text-gray-500">總金額：</span> <span class="text-red-500 font-bold text-xl">${{ order.total_amount }}</span></p>
+    </div>
+    
+    <br>
+    <a href="/" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+        回到首頁繼續逛逛
+    </a>
+</div>
+{% endblock %} 
