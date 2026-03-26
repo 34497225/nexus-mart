@@ -142,6 +142,6 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
 
 # 集中收集靜態檔案的目錄 (給 Nginx 用的)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-CSRF_TRUSTED_ORIGINS = 'http://43.213.31.81:8002'
+CSRF_TRUSTED_ORIGINS = ['http://43.213.31.81:8002']
 
 
