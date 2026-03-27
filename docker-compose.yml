@@ -23,6 +23,7 @@ services:
   # 3. 網頁伺服器 (Django + Gunicorn)
   web:
     build: .
+    restart: always
     container_name: nexus_web
     volumes:
       - .:/app
@@ -43,6 +44,7 @@ services:
   # 4. Celery 背景任務
   celery:
     build: .
+    restart: always
     container_name: nexus_celery
     volumes:
       - .:/app
