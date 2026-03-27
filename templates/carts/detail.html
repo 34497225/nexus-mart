@@ -7,20 +7,22 @@
     <h1 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">Your Cart.</h1>
 
     {% if cart_items %}
-        <div class="bg-white rounded-2xl overflow-hidden mb-12">
+        <!-- 加入 shadow-sm 與邊框提升質感 -->
+        <div class="bg-white rounded-2xl overflow-hidden mb-12 shadow-sm border border-gray-100">
             <table class="w-full text-left">
                 <thead>
                     <tr class="text-xs text-gray-400 tracking-widest uppercase border-b border-gray-100">
-                        <th class="py-6 font-medium">Product</th>
+                        <!-- 加入 px-6 sm:px-10 增加左右呼吸空間 -->
+                        <th class="py-6 px-6 sm:px-10 font-medium">Product</th>
                         <th class="py-6 font-medium hidden md:table-cell">Price</th>
                         <th class="py-6 font-medium text-center">Qty</th>
-                        <th class="py-6 font-medium text-right">Total</th>
+                        <th class="py-6 px-6 sm:px-10 font-medium text-right">Total</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     {% for item in cart_items %}
                     <tr class="group">
-                        <td class="py-6 flex items-center gap-6">
+                        <td class="py-6 px-6 sm:px-10 flex items-center gap-6">
                             {% if item.product.image %}
                                 <div class="w-20 h-24 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
                                     <img src="{{ item.product.image.url }}" class="w-full h-full object-cover">
@@ -30,13 +32,14 @@
                         </td>
                         <td class="py-6 text-gray-500 hidden md:table-cell">${{ item.product.price }}</td>
                         <td class="py-6 text-center text-gray-900">{{ item.quantity }}</td>
-                        <td class="py-6 text-right font-medium text-gray-900">${{ item.subtotal }}</td>
+                        <td class="py-6 px-6 sm:px-10 text-right font-medium text-gray-900">${{ item.subtotal }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             
-            <div class="pt-8 mt-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8">
+            <!-- 🔹 關鍵修復：加入 pb-10 (下方留白) 與 px-6 sm:px-10 (左右留白) -->
+            <div class="pt-8 pb-10 px-6 sm:px-10 mt-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8">
                 <a href="/" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors border-b border-transparent hover:border-gray-900 pb-0.5">
                     繼續購物
                 </a>
