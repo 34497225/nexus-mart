@@ -80,8 +80,8 @@
 
 1. 取得程式碼
 
-git clone https://github.com/34497225/nexus-mart.git
-cd nexus-mart
+    git clone https://github.com/34497225/nexus-mart.git
+    cd nexus-mart
 
 
 2. 設定環境變數
