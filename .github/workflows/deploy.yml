@@ -35,6 +35,10 @@ jobs:
           
           # 4. 重新編譯並重啟 Docker 微服務架構
           sudo docker compose up --build -d
+
+          # 5. 🔴 關鍵修復：強制重啟 Nginx 守衛！
+          # 因為 web 容器重建後 IP 會改變，必須重啟 nginx 讓它重新連線，否則會 502 Bad Gateway
+          sudo docker compose restart nginx
           
-          # 5. 清理多餘的舊鏡像，釋放硬碟空間
+          # 6. 清理多餘的舊鏡像，釋放硬碟空間
           sudo docker image prune -f
