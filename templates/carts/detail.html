@@ -1,55 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}我的購物車 | NexusMart{% endblock %}
+{% block title %}購物車 | NexusMart.{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">🛒 我的購物車</h1>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">Your Cart.</h1>
 
     {% if cart_items %}
-        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-            <table class="w-full text-left border-collapse">
+        <div class="bg-white rounded-2xl overflow-hidden mb-12">
+            <table class="w-full text-left">
                 <thead>
-                    <tr class="bg-gray-50 text-gray-600 text-sm uppercase tracking-wider border-b">
-                        <th class="p-4 font-semibold">商品名稱</th>
-                        <th class="p-4 font-semibold">單價</th>
-                        <th class="p-4 font-semibold text-center">數量</th>
-                        <th class="p-4 font-semibold text-right">小計</th>
+                    <tr class="text-xs text-gray-400 tracking-widest uppercase border-b border-gray-100">
+                        <th class="py-6 font-medium">Product</th>
+                        <th class="py-6 font-medium hidden md:table-cell">Price</th>
+                        <th class="py-6 font-medium text-center">Qty</th>
+                        <th class="py-6 font-medium text-right">Total</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-50">
                     {% for item in cart_items %}
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="p-4 flex items-center gap-4">
+                    <tr class="group">
+                        <td class="py-6 flex items-center gap-6">
                             {% if item.product.image %}
-                                <img src="{{ item.product.image.url }}" class="w-16 h-16 object-cover rounded-lg border">
+                                <div class="w-20 h-24 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
+                                    <img src="{{ item.product.image.url }}" class="w-full h-full object-cover">
+                                </div>
                             {% endif %}
-                            <span class="font-bold text-gray-800">{{ item.product.name }}</span>
+                            <span class="font-medium text-gray-900">{{ item.product.name }}</span>
                         </td>
-                        <td class="p-4 text-gray-600">${{ item.product.price }}</td>
-                        <td class="p-4 text-center font-medium">{{ item.quantity }}</td>
-                        <td class="p-4 text-right font-bold text-red-500">${{ item.subtotal }}</td>
+                        <td class="py-6 text-gray-500 hidden md:table-cell">${{ item.product.price }}</td>
+                        <td class="py-6 text-center text-gray-900">{{ item.quantity }}</td>
+                        <td class="py-6 text-right font-medium text-gray-900">${{ item.subtotal }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             
-            <div class="bg-gray-50 p-6 flex flex-col md:flex-row justify-between items-center border-t">
-                <a href="/" class="text-blue-600 hover:text-blue-800 font-medium mb-4 md:mb-0">← 繼續購物</a>
-                <div class="text-right">
-                    <span class="text-gray-500 mr-4">總金額：</span>
-                    <span class="text-3xl font-black text-red-600">${{ total_price }}</span>
-                    <a href="{% url 'checkout' %}" class="ml-6 bg-green-500 text-white font-bold py-3 px-8 rounded-xl hover:bg-green-600 shadow-lg shadow-green-200 transition-colors inline-block">
+            <div class="pt-8 mt-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8">
+                <a href="/" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors border-b border-transparent hover:border-gray-900 pb-0.5">
+                    繼續購物
+                </a>
+                <div class="flex items-center gap-8">
+                    <div class="text-right">
+                        <span class="text-sm tracking-widest text-gray-400 uppercase mr-4">Subtotal</span>
+                        <span class="font-serif text-3xl text-gray-900">${{ total_price }}</span>
+                    </div>
+                    <a href="{% url 'checkout' %}" class="bg-gray-900 text-white font-medium py-4 px-10 rounded-full hover:bg-gray-800 transition-colors tracking-wide">
                         前往結帳
                     </a>
                 </div>
             </div>
         </div>
-        <div class="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-            <div class="text-6xl mb-4">🛒</div>
-            <p class="text-xl text-gray-500 font-medium mb-6">您的購物車目前是空的喔！</p>
-            <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-bold transition-colors">
-                去逛逛商品
+    {% else %}
+        <div class="text-center py-32 flex flex-col items-center">
+            <span class="font-serif text-3xl text-gray-300 mb-6 italic">Your cart is empty.</span>
+            <a href="/" class="text-sm font-medium text-gray-900 border-b border-gray-900 pb-0.5 hover:text-gray-500 hover:border-gray-500 transition-colors">
+                探索商品
             </a>
         </div>
     {% endif %}

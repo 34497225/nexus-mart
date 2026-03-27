@@ -4,8 +4,8 @@ from django.db.models import Q
 
 def index(request):
     """商城首頁視圖"""
-    # 抓取所有商品，並按造建立時間倒序排列
-    products = Product.objects.all().order_by('-created_at')
+    # 🔹 加上 .filter(is_active=True)，只抓取有上架的商品
+    products = Product.objects.filter(is_active=True).order_by('-created_at')
     
     # 將資料傳遞給模板
     return render(request, 'goods/index.html', {'products': products})
@@ -24,10 +24,10 @@ def search(request):
     query = request.GET.get('q', '').strip()
     
     if query:
-        # 🔹 核心邏輯：使用 Q 物件進行 OR 查詢 (搜尋名稱「或」描述)
-        # icontains 代表「不區分大小寫的包含」
+        # 🔹 同樣加上 is_active=True 的過濾條件
         products = Product.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
+            Q(name__icontains=query) | Q(description__icontains=query),
+            is_active=True
         ).order_by('-created_at')
     else:
         # 如果沒輸入關鍵字，回傳空清單

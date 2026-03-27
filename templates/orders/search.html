@@ -1,64 +1,53 @@
 {% extends "base.html" %}
-{% block title %}訂單查詢 | NexusMart{% endblock %}
+{% block title %}訂單查詢 | NexusMart.{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12 max-w-4xl">
-    <h1 class="text-3xl font-bold mb-8 text-center">🔍 查詢我的訂單</h1>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-16">
+        <h1 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4">Track Order.</h1>
+        <p class="text-sm text-gray-400 tracking-widest uppercase">查詢您的歷史訂單</p>
+    </div>
     
-    <!-- 搜尋表單 (使用 GET 方法) -->
-    <form action="{% url 'order_search' %}" method="GET" class="flex justify-center mb-12">
-        <input type="text" name="phone" value="{{ phone }}" placeholder="請輸入您下單時填寫的電話號碼" required class="w-full md:w-1/2 px-6 py-4 rounded-l-xl border border-gray-300 focus:outline-none focus:border-blue-500 text-lg">
-        <button type="submit" class="bg-blue-600 text-white font-bold px-8 py-4 rounded-r-xl hover:bg-blue-700 transition-colors text-lg">
-            查詢
-        </button>
+    <form action="{% url 'order_search' %}" method="GET" class="flex justify-center mb-16 max-w-xl mx-auto">
+        <div class="relative w-full flex">
+            <input type="text" name="phone" value="{{ phone }}" placeholder="輸入訂購時的電話號碼..." required class="flex-1 bg-gray-50 border-none px-6 py-4 rounded-l-full focus:outline-none focus:ring-1 focus:ring-gray-300 text-gray-900">
+            <button type="submit" class="bg-gray-900 text-white font-medium px-8 py-4 rounded-r-full hover:bg-gray-800 transition-colors tracking-wide">
+                Track
+            </button>
+        </div>
     </form>
 
-    <!-- 查詢結果區塊 -->
     {% if phone %}
         {% if orders %}
-            <h2 class="text-xl font-bold mb-6 text-gray-700">找到 {{ orders|length }} 筆符合的訂單：</h2>
-            <div class="space-y-6">
+            <div class="space-y-8">
                 {% for order in orders %}
-                <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6 hover:shadow-md transition-shadow">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-4">
+                <div class="border border-gray-100 rounded-3xl p-8 hover:border-gray-200 transition-colors">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-6 mb-6">
                         <div>
-                            <span class="text-sm text-gray-500">訂單編號</span>
-                            <p class="text-lg font-bold text-blue-600">#{{ order.id }}</p>
+                            <span class="block text-xs text-gray-400 uppercase tracking-widest mb-1">Order #{{ order.id }}</span>
+                            <span class="text-gray-900">{{ order.created_at|date:"Y.m.d H:i" }}</span>
                         </div>
-                        <div class="mt-2 md:mt-0 text-left md:text-right">
-                            <span class="text-sm text-gray-500">成立時間</span>
-                            <p class="font-medium text-gray-800">{{ order.created_at|date:"Y-m-d H:i" }}</p>
-                        </div>
-                        <div class="mt-2 md:mt-0 text-left md:text-right">
-                            <span class="text-sm text-gray-500">收件人</span>
-                            <p class="font-medium text-gray-800">{{ order.name }}</p>
-                        </div>
-                        <div class="mt-2 md:mt-0 text-left md:text-right">
-                            <span class="text-sm text-gray-500">訂單總計</span>
-                            <p class="text-xl font-black text-red-500">${{ order.total_amount }}</p>
+                        <div class="mt-4 md:mt-0 text-left md:text-right">
+                            <span class="block text-xs text-gray-400 uppercase tracking-widest mb-1">Total Amount</span>
+                            <span class="font-serif text-2xl text-gray-900">${{ order.total_amount }}</span>
                         </div>
                     </div>
                     
-                    <!-- 訂單明細 -->
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <h4 class="text-sm font-bold text-gray-500 mb-3">購買明細：</h4>
-                        <ul class="space-y-2">
-                            {% for item in order.items.all %}
-                            <li class="flex justify-between items-center text-sm">
-                                <span class="font-medium text-gray-800">{{ item.product.name }}</span>
-                                <span class="text-gray-600">${{ item.price }} x {{ item.quantity }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
+                    <div class="space-y-4">
+                        {% for item in order.items.all %}
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">{{ item.product.name }} <span class="text-gray-400 ml-2">x {{ item.quantity }}</span></span>
+                            <span class="font-medium text-gray-900">${{ item.price }}</span>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="text-center py-16 bg-white rounded-3xl shadow-sm border border-gray-100">
-                <div class="text-6xl mb-4">📭</div>
-                <p class="text-xl text-gray-600 font-medium">找不到對應的訂單！</p>
-                <p class="text-gray-400 mt-2">請確認您輸入的電話號碼「{{ phone }}」是否正確。</p>
+            <div class="text-center py-20">
+                <span class="font-serif text-2xl text-gray-300 mb-4 italic block">No orders found.</span>
+                <p class="text-sm text-gray-400">查無此電話號碼 {{ phone }} 的訂單紀錄。</p>
             </div>
         {% endif %}
     {% endif %}

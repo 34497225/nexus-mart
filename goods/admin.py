@@ -9,8 +9,14 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'stock', 'created_at')
-    list_filter = ('category', 'created_at')
-    # 讓後端介面可以直接搜尋商品名稱
+    # 1. 決定列表頁要顯示哪些欄位 (把 is_active 加進來)
+    list_display = ('id', 'name', 'category', 'price', 'stock', 'is_active', 'created_at')
+    
+    # 2. 右側的篩選器 (可以用「是否上架」來篩選商品)
+    list_filter = ('category', 'is_active', 'created_at')
+    
+    # 3. ⭐️ 最強大的功能：允許在列表頁直接編輯這些欄位！
+    list_editable = ('price', 'stock', 'is_active')
+    
+    # 4. 搜尋框
     search_fields = ('name', 'description')
-    list_editable = ('price', 'stock') # 可以在清單直接修改價格與庫存

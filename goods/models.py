@@ -27,9 +27,13 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=200, verbose_name="商品名稱")
     description = models.TextField(verbose_name="商品描述", blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="價格")
+    price = models.IntegerField(verbose_name="價格")
     stock = models.IntegerField(default=0, verbose_name="庫存數量")
     # 先用 URL 代表圖片，Day 4 我們再來處理實體圖片上傳
+    
+    # 🔹 新增這個欄位：控制商品是否上架
+    is_active = models.BooleanField(default=True, verbose_name="是否上架")
+    
     #image_url = models.URLField(max_length=500, blank=True, verbose_name="圖片連結")
     image = models.ImageField(upload_to='products/', verbose_name="商品圖片", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="上架時間")
